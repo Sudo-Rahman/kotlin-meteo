@@ -13,8 +13,8 @@ private val retrofit = Retrofit.Builder()
 interface WeatherAPI {
     @retrofit2.http.GET("v1/forecast?")
     suspend fun getNowWheater(
-        @retrofit2.http.Query("latitude") latitude: String = "46.795166",
-        @retrofit2.http.Query("longitude") longitude: String = "4.80562",
+        @retrofit2.http.Query("latitude") latitude: String ,
+        @retrofit2.http.Query("longitude") longitude: String,
         @retrofit2.http.Query("hourly") hourly: String = "temperature_2m,weathercode,precipitation_probability",
         @retrofit2.http.Query("timezone") timezone: String = "auto",
         @retrofit2.http.Query("forecast_days") forecast_days: String = "1",

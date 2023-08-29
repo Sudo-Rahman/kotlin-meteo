@@ -11,23 +11,34 @@ private val retrofit = Retrofit.Builder()
     .build()
 
 interface WeatherAPI {
+
+    enum class DAYS(val value: String) {
+        ONE("1"),
+        TEN("10")
+    }
     @retrofit2.http.GET("v1/forecast?")
     suspend fun getNowWheater(
         @retrofit2.http.Query("latitude") latitude: String ,
         @retrofit2.http.Query("longitude") longitude: String,
         @retrofit2.http.Query("hourly") hourly: String = "temperature_2m,weathercode,precipitation_probability",
         @retrofit2.http.Query("timezone") timezone: String = "auto",
-        @retrofit2.http.Query("forecast_days") forecast_days: String = "1",
+        @retrofit2.http.Query("forecast_days") forecast_days: String = "2",
+
+        @retrofit2.http.Query("daily") daily: String = "sunrise,sunset",
+
+        @retrofit2.http.Query("model") limit: String = "icon_eu",
 
     ): String
 
     @retrofit2.http.GET("v1/forecast?")
     suspend fun getWheaterTenDays(
-        @retrofit2.http.Query("latitude") latitude: String = "46.795166",
-        @retrofit2.http.Query("longitude") longitude: String = "4.80562",
+        @retrofit2.http.Query("latitude") latitude: String,
+        @retrofit2.http.Query("longitude") longitude: String,
         @retrofit2.http.Query("daily") daily: String = "temperature_2m_max,temperature_2m_min,weathercode,precipitation_probability_max",
         @retrofit2.http.Query("timezone") timezone: String = "auto",
         @retrofit2.http.Query("forecast_days") forecast_days: String = "10",
+        @retrofit2.http.Query("model") limit: String = "icon_eu",
+
 
     ): String
 }

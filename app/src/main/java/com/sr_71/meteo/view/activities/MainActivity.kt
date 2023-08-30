@@ -2,6 +2,7 @@ package com.sr_71.meteo.view.activities
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
@@ -11,6 +12,7 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.edit
 import com.sr_71.meteo.API.*
 import com.sr_71.meteo.R
 import com.sr_71.meteo.view.fagments.DailyWeatherFragment
@@ -27,15 +29,34 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        supportFragmentManager.beginTransaction()
+            .replace(
+                R.id.hourlyWeatherFragment,
+                HourlyWeatherFragment(_location),
+                HourlyWeatherFragment::class.java.simpleName
+            )
+            .commit()
+
+        supportFragmentManager.beginTransaction()
+            .replace(
+                R.id.dailyWeatherFrangment,
+                DailyWeatherFragment(_location),
+                DailyWeatherFragment::class.java.simpleName
+            )
+            .commit()
+
+        val sharedPref = getSharedPreferences("weather", MODE_PRIVATE)
+        sharedPref.run {
+            val city = getString("city", "Paris")
+            val longitude = getString("longitude", "0.0")!!.toDouble()
+            val latitude = getString("latitude", "0.0")!!.toDouble()
+            _location.setLocation(Location("").apply {
+                this.longitude = longitude
+                this.latitude = latitude
+            })
+            findViewById<TextView>(R.id.txt).text = city
+        }
         getLocation()
-
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.hourlyWeatherFragment, HourlyWeatherFragment(_location), HourlyWeatherFragment::class.java.simpleName)
-            .commit()
-
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.dailyWeatherFrangment, DailyWeatherFragment(_location), DailyWeatherFragment::class.java.simpleName)
-            .commit()
 
     }
 
@@ -77,7 +98,15 @@ class MainActivity : AppCompatActivity() {
     private val locationListener: LocationListener = object : LocationListener {
         override fun onLocationChanged(location: Location) {
             _location.setLocation(location)
-            findViewById<TextView>(R.id.txt).text = getCityName(location.latitude, location.longitude)
+            val city = getCityName(location.latitude, location.longitude)
+            findViewById<TextView>(R.id.txt).text = city
+
+            val sharedPref = getSharedPreferences("weather", MODE_PRIVATE)
+            sharedPref.edit {
+                putString("city", city)
+                putString("longitude", location.longitude.toString())
+                putString("latitude", location.latitude.toString())
+            }
         }
 
         override fun onProviderEnabled(provider: String) {}

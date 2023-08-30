@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.sr_71.meteo.API.*
 import com.sr_71.meteo.R
+import com.sr_71.meteo.view.fagments.DailyWeatherFragment
 import com.sr_71.meteo.view.fagments.HourlyWeatherFragment
 import com.sr_71.meteo.view_model.LocationViewModel
 import java.util.Locale
@@ -28,9 +29,12 @@ class MainActivity : AppCompatActivity() {
 
         getLocation()
 
-        val fragment = HourlyWeatherFragment(_location)
         supportFragmentManager.beginTransaction()
-            .replace(R.id.hourly_weather_fragment, fragment, fragment.javaClass.simpleName)
+            .replace(R.id.hourlyWeatherFragment, HourlyWeatherFragment(_location), HourlyWeatherFragment::class.java.simpleName)
+            .commit()
+
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.dailyWeatherFrangment, DailyWeatherFragment(_location), DailyWeatherFragment::class.java.simpleName)
             .commit()
 
     }

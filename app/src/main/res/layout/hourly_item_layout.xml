@@ -12,14 +12,14 @@
             app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-                android:text="TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/date"
                 android:layout_weight="1"
                 android:textAlignment="center"
                 android:gravity="center"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/design_default_color_background" />
 
         <ImageView
                 android:layout_width="match_parent"
@@ -31,7 +31,6 @@
                 android:layout_margin="2dp" />
 
         <TextView
-                android:text="TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/precipitation"
@@ -39,17 +38,17 @@
                 android:textSize="10sp"
                 android:textAlignment="center"
                 android:gravity="center"
-                android:textColor="@color/material_dynamic_primary80"
+                android:textColor="#FFBBDEFB"
                 android:textStyle="bold" />
 
         <TextView
-                android:text="TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/temperature"
                 android:layout_weight="1"
                 android:textAlignment="center"
                 android:gravity="center"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/design_default_color_background" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

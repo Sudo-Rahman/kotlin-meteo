@@ -11,8 +11,10 @@ import com.sr_71.meteo.model.Weather
 import com.sr_71.meteo.model.WeatherCode
 import com.sr_71.meteo.model.weatherCodeToImg
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZoneOffset
+import kotlin.math.roundToInt
 
 class HourlyWeatherAdapter(var weather: Weather) : RecyclerView.Adapter<HourlyWeatherViewHolder>() {
 
@@ -27,20 +29,28 @@ class HourlyWeatherAdapter(var weather: Weather) : RecyclerView.Adapter<HourlyWe
     }
 
     override fun onBindViewHolder(holder: HourlyWeatherViewHolder, position: Int) {
-        // get local hour
-        val current_hour = LocalDateTime.now().hour
-        val pos_local = position + current_hour
+        // get UTC + 0 hour
+        val utc_hour = LocalDateTime.now(ZoneId.of("UTC")).hour
+//        println("utc_hour $utc_hour")
 
-        // get the current hour to the timezone of the country
-        val current_hour_in_country = LocalDateTime.now().atOffset(ZoneOffset.UTC)
-            .atZoneSameInstant(ZoneId.of(weather.timezone)).hour
+        //get offset of the country
+        val offset = weather.utc_offset_seconds/3600
+
+        //get time on local machine
+        val local_hour = LocalTime.now().hour
+        val local_pos = position + local_hour
+
+        //get current hour in country
+        val current_hour_in_country = utc_hour + offset
         val pos_in_country = position + current_hour_in_country
 
 
-        holder.time.text = getHourString(pos_local)
-        holder.temperature.text = "${weather.hourly?.temperature_2m?.get(pos_in_country)}°"
-        holder.precipitation.text =
-            "${weather.hourly?.precipitation_probability?.get(pos_in_country)}%"
+        holder.time.text = "${getHour(local_pos)}h"
+        holder.temperature.text = "${weather.hourly?.temperature_2m?.get(pos_in_country)?.roundToInt()}°"
+
+        if ((weather.hourly?.precipitation_probability?.get(pos_in_country)?:0 )>5)
+            holder.precipitation.text =
+                "${weather.hourly?.precipitation_probability?.get(pos_in_country)}%"
 
         val weatherCode = WeatherCode.from(weather.hourly?.weathercode?.get(pos_in_country) ?: 0)
         if (isDay(pos_in_country)) {
@@ -51,26 +61,18 @@ class HourlyWeatherAdapter(var weather: Weather) : RecyclerView.Adapter<HourlyWe
             )
     }
 
-    private fun getHourString(pos: Int): String {
-        val hour = LocalDateTime.now().hour
-        return if (getHour(pos) == hour) "Now" else "${getHour(pos)}h"
-    }
-
     private fun getHour(pos: Int): Int {
-        return if (pos >= 24) {
-            pos - 24
-        } else {
-            pos
-        }
+        return pos % 24
     }
 
     private fun isDay(pos: Int): Boolean {
+        val  offset = weather.utc_offset_seconds/3600
         val sunrise = LocalDateTime.parse(weather.daily?.sunrise?.get(0)).atOffset(ZoneOffset.UTC)
-            .atZoneSameInstant(ZoneId.of(weather.timezone)).hour
+            .atZoneSameInstant(ZoneId.of(weather.timezone)).hour - offset
         val sunset = LocalDateTime.parse(weather.daily?.sunset?.get(0)).atOffset(ZoneOffset.UTC)
-            .atZoneSameInstant(ZoneId.of(weather.timezone)).hour
-        println("sunrise: $sunrise sunset: $sunset  hour: ${getHour(pos)}")
-        return getHour(pos) >= sunrise && getHour(pos) <= sunset
+            .atZoneSameInstant(ZoneId.of(weather.timezone)).hour - offset
+        println("sunrise $sunrise sunset $sunset")
+        return getHour(pos) > sunrise  && getHour(pos) <= sunset
     }
 
 }

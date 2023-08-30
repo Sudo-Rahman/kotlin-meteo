@@ -26,7 +26,7 @@ interface WeatherAPI {
 
         @retrofit2.http.Query("daily") daily: String = "sunrise,sunset",
 
-        @retrofit2.http.Query("model") limit: String = "icon_eu",
+        @retrofit2.http.Query("models") models: String = "best_match",
 
     ): String
 
@@ -37,7 +37,7 @@ interface WeatherAPI {
         @retrofit2.http.Query("daily") daily: String = "temperature_2m_max,temperature_2m_min,weathercode,precipitation_probability_max",
         @retrofit2.http.Query("timezone") timezone: String = "auto",
         @retrofit2.http.Query("forecast_days") forecast_days: String = "10",
-        @retrofit2.http.Query("model") limit: String = "icon_eu",
+        @retrofit2.http.Query("models") models: String = "best_match",
 
 
     ): String

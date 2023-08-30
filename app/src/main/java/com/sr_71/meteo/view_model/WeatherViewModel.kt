@@ -9,7 +9,7 @@ import com.sr_71.meteo.API.WeatherApiManager
 import com.sr_71.meteo.model.Weather
 import kotlinx.coroutines.launch
 
-class HourlyWeatherViewModel : ViewModel() {
+class WeatherViewModel : ViewModel() {
     private val _weather = MutableLiveData<Weather>()
     val weather: LiveData<Weather>
         get() = _weather

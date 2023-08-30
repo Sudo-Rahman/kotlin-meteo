@@ -17,12 +17,12 @@ data class Weather(
 
 data class WeatherDaily(
     val time: List<String>,
-    val precipitation_probability_max: List<Int>,
-    val temperature_2m_max: List<Double>,
-    val temperature_2m_min: List<Double>,
-    val weathercode: List<Int>,
-    val sunrise: List<String>,
-    val sunset: List<String>,
+    val precipitation_probability_max: List<Int>? = null,
+    val temperature_2m_max: List<Double>? = null,
+    val temperature_2m_min: List<Double>? = null,
+    val weathercode: List<Int>? = null,
+    val sunrise: List<String>? = null,
+    val sunset: List<String>? = null,
 )
 
 data class WeatherHourly(

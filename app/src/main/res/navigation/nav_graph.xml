@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/nav_graph"
+        app:startDestination="@id/navHostFragment">
+    <fragment
+            android:id="@+id/navHostFragment"
+            android:name="com.sr_71.meteo.view.fagments.NavHostFragment"
+            android:label="fragment_nav_host"
+            tools:layout="@layout/fragment_nav_host" >
+        <action
+                android:id="@+id/action_navHostFragment_to_dailyDetailWeatherFragment"
+                app:destination="@id/dailyDetailWeatherFragment" />
+    </fragment>
+    <fragment
+            android:id="@+id/dailyDetailWeatherFragment"
+            android:name="com.sr_71.meteo.view.fagments.DailyDetailWeatherFragment"
+            android:label="fragment_daily_detail_weather"
+            tools:layout="@layout/fragment_daily_detail_weather" >
+        <argument
+                android:name="position"
+                app:argType="integer"
+                android:defaultValue="0" />
+        <argument
+                android:name="weather"
+                app:argType="com.sr_71.meteo.model.Weather" />
+        <argument
+                android:name="dayString"
+                app:argType="string" />
+    </fragment>
+</navigation>

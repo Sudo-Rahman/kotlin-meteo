@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".view.fagments.DailyDetailWeatherFragment">
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/hello_blank_fragment"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="16dp"
+            android:id="@+id/dayString"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="#FF42A5F5" />
+
+    <androidx.fragment.app.FragmentContainerView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/hourlyDetailFragment"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dayString"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp" />
+
+    <androidx.cardview.widget.CardView
+            android:layout_width="164dp"
+            android:layout_height="164dp"
+            app:layout_constraintTop_toBottomOf="@id/hourlyDetailFragment"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:cardCornerRadius="16dp"
+            android:layout_marginStart="8dp"
+            app:cardElevation="3dp"
+            app:cardBackgroundColor="#FF64B5F6"
+            android:id="@+id/soleil"
+            app:layout_constraintEnd_toStartOf="@+id/soleil1"
+            android:layout_marginEnd="8dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible">
+
+            <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:adjustViewBounds="true"
+                    app:srcCompat="@drawable/day_clear"
+                    android:alpha="0.4" />
+
+            <TextView
+                    android:text="Levé du soleil"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/design_default_color_background"
+                    android:textStyle="bold" />
+
+            <TextView
+                    android:text="TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/sunrise"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:textColor="@color/design_default_color_background"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="8dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+            android:layout_width="164dp"
+            android:layout_height="164dp"
+            app:layout_constraintTop_toBottomOf="@id/hourlyDetailFragment"
+            android:layout_marginTop="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="3dp"
+            app:cardBackgroundColor="#FF64B5F6"
+            android:id="@+id/soleil1"
+            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toEndOf="@id/soleil"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible">
+
+            <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:adjustViewBounds="true"
+                    app:srcCompat="@drawable/night_full_moon_clear"
+                    android:alpha="0.4" />
+
+            <TextView
+                    android:text="Couché du soleil"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/design_default_color_background"
+                    android:textStyle="bold" />
+
+            <TextView
+                    android:text="TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/sunset"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:textColor="@color/design_default_color_background"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="8dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+            android:layout_width="164dp"
+            android:layout_height="164dp"
+            app:layout_constraintTop_toBottomOf="@id/soleil"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:cardCornerRadius="16dp"
+            android:layout_marginStart="8dp"
+            app:cardElevation="3dp"
+            app:cardBackgroundColor="#FF64B5F6"
+            android:id="@+id/UV"
+            app:layout_constraintEnd_toStartOf="@+id/soleil1"
+            android:layout_marginEnd="8dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible">
+
+            <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:adjustViewBounds="true"
+                    app:srcCompat="@drawable/ne_pas_exposer_au_soleil"
+                    android:alpha="0.4" />
+
+            <TextView
+                    android:text="UV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/design_default_color_background"
+                    android:textStyle="bold" />
+
+            <TextView
+                    android:text="TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/uvTxt"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:textColor="@color/design_default_color_background"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="8dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+            android:layout_width="164dp"
+            android:layout_height="164dp"
+            app:layout_constraintTop_toBottomOf="@id/soleil1"
+            android:layout_marginTop="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="3dp"
+            app:cardBackgroundColor="#FF64B5F6"
+            android:id="@+id/vent"
+            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toEndOf="@id/soleil"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible">
+
+            <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:adjustViewBounds="true"
+                    app:srcCompat="@drawable/vent"
+                    android:alpha="0.4" />
+
+            <TextView
+                    android:text="Vitesse du vent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/design_default_color_background"
+                    android:textStyle="bold" />
+
+            <TextView
+                    android:text="TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ventTxt"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:textColor="@color/design_default_color_background"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="8dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+            android:layout_width="164dp"
+            android:layout_height="164dp"
+            app:layout_constraintTop_toBottomOf="@id/UV"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:cardCornerRadius="16dp"
+            android:layout_marginStart="8dp"
+            app:cardElevation="3dp"
+            app:cardBackgroundColor="#FF64B5F6"
+            android:id="@+id/ventDirection"
+            app:layout_constraintEnd_toStartOf="@+id/soleil1"
+            android:layout_marginEnd="8dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible">
+
+            <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:adjustViewBounds="true"
+                    app:srcCompat="@drawable/appareil_gps"
+                    android:alpha="0.4"
+                    android:id="@+id/ventImg" />
+
+            <TextView
+                    android:text="Direction du vent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/design_default_color_background"
+                    android:textStyle="bold" />
+
+            <TextView
+                    android:text="TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ventDirectionTxt"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:textColor="@color/design_default_color_background"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="8dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+            android:layout_width="164dp"
+            android:layout_height="164dp"
+            app:layout_constraintTop_toBottomOf="@id/vent"
+            android:layout_marginTop="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="3dp"
+            app:cardBackgroundColor="#FF64B5F6"
+            android:id="@+id/maxPrecipitation"
+            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toEndOf="@id/soleil"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible">
+
+            <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:adjustViewBounds="true"
+                    app:srcCompat="@drawable/capteur_de_pluie"
+                    android:alpha="0.4" />
+
+            <TextView
+                    android:text="Précipitation maximale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/design_default_color_background"
+                    android:textStyle="bold" />
+
+            <TextView
+                    android:text="TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/maxPrecipitationTxt"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:textColor="@color/design_default_color_background"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="8dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

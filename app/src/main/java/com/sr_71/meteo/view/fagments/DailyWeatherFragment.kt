@@ -18,6 +18,7 @@ import com.sr_71.meteo.view_model.WeatherViewModel
 class DailyWeatherFragment(private val _location: LocationViewModel) : Fragment() {
     private var _weatherViewModel = WeatherViewModel()
     private lateinit var _recyclerView: RecyclerView
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -28,12 +29,20 @@ class DailyWeatherFragment(private val _location: LocationViewModel) : Fragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         _recyclerView = view.findViewById(R.id.dailyRecycler)
         val dividerItemDecoration = DividerItemDecoration(
             _recyclerView.getContext(),
             DividerItemDecoration.VERTICAL
         )
-        dividerItemDecoration.setDrawable(ColorDrawable(resources.getColor(androidx.transition.R.color.material_grey_300, null)))
+        dividerItemDecoration.setDrawable(
+            ColorDrawable(
+                resources.getColor(
+                    androidx.transition.R.color.material_grey_300,
+                    null
+                )
+            )
+        )
         _recyclerView.addItemDecoration(dividerItemDecoration)
         updateWeather()
         obserLocation()
@@ -58,9 +67,18 @@ class DailyWeatherFragment(private val _location: LocationViewModel) : Fragment(
                 val adapter = _recyclerView.adapter as DailyWeatherAdapter
                 adapter.weather = it
                 println("adapter.weather ${it.daily}")
-                adapter!!.notifyDataSetChanged()
+                adapter.notifyDataSetChanged()
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        _weatherViewModel.weather(
+            longitude = _location.location.value!!.longitude,
+            latitude = _location.location.value!!.latitude,
+            weather = WeatherAPI.DAYS.TEN
+        )
     }
 
 }

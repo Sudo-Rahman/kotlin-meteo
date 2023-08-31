@@ -2,19 +2,23 @@ package com.sr_71.meteo.model
 
 import com.sr_71.meteo.R
 import androidx.annotation.DrawableRes
+import kotlinx.parcelize.Parcelize
 
 
+@Parcelize
 data class Weather(
     val timezone: String,
     val utc_offset_seconds: Int,
+    val elevation : Int,
 
     // for daily weather
     val daily: WeatherDaily? = null,
 
     // for hourly weather
     val hourly: WeatherHourly? = null,
-)
+) : android.os.Parcelable
 
+@Parcelize
 data class WeatherDaily(
     val time: List<String>,
     val precipitation_probability_max: List<Int>? = null,
@@ -23,14 +27,20 @@ data class WeatherDaily(
     val weathercode: List<Int>? = null,
     val sunrise: List<String>? = null,
     val sunset: List<String>? = null,
-)
+    val uv_index_max: List<Double>? = null,
+    val windspeed_10m_max: List<Double>? = null,
+    val winddirection_10m_dominant: List<Double>? = null,
+) : android.os.Parcelable
 
+@Parcelize
 data class WeatherHourly(
-    val time: List<String>?,
-    val precipitation_probability: List<Int>?,
-    val temperature_2m: List<Double>?,
-    val weathercode: List<Int>,
-)
+    val time: List<String>? = null,
+    val precipitation_probability: List<Int>? = null,
+    val temperature_2m: List<Double>? = null,
+    val weathercode: List<Int>? = null,
+    val is_day: List<Int>? = null,
+
+) : android.os.Parcelable
 
 
 enum class WeatherCode(val code: Int) {

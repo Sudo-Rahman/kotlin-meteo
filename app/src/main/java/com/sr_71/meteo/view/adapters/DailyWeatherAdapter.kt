@@ -5,11 +5,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.RecyclerView
 import com.sr_71.meteo.R
 import com.sr_71.meteo.model.Weather
 import com.sr_71.meteo.model.WeatherCode
 import com.sr_71.meteo.model.weatherCodeToImg
+import com.sr_71.meteo.view.fagments.NavHostFragmentDirections
 import java.text.SimpleDateFormat
 import java.util.Date
 import kotlin.math.roundToInt
@@ -50,6 +53,12 @@ class DailyWeatherAdapter(var weather: Weather) : RecyclerView.Adapter<DailyWeat
             "${weather.daily?.temperature_2m_min?.get(position)?.roundToInt()}°"
         holder.maxTemperature.text =
             "${weather.daily?.temperature_2m_max?.get(position)?.roundToInt()}°"
+
+        holder.view.setOnClickListener {
+            // go to the detail fragment
+            val action = NavHostFragmentDirections.actionNavHostFragmentToDailyDetailWeatherFragment(weather, holder.day.text.toString(), position)
+            holder.view.findNavController().navigate(action)
+        }
     }
 
 }

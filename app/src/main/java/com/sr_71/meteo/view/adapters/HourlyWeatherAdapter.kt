@@ -13,7 +13,6 @@ import com.sr_71.meteo.model.weatherCodeToImg
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
-import java.time.ZoneOffset
 import kotlin.math.roundToInt
 
 class HourlyWeatherAdapter(var weather: Weather, private val _currentHour: Boolean = true) :
@@ -58,7 +57,6 @@ class HourlyWeatherAdapter(var weather: Weather, private val _currentHour: Boole
     private fun startCurrentHour(holder: HourlyWeatherViewHolder, position: Int) {
         // get UTC + 0 hour
         val utc_hour = LocalDateTime.now(ZoneId.of("UTC")).hour
-//        println("utc_hour $utc_hour")
 
         //get offset of the country
         val offset = weather.utc_offset_seconds / 3600
@@ -81,7 +79,7 @@ class HourlyWeatherAdapter(var weather: Weather, private val _currentHour: Boole
                 "${weather.hourly?.precipitation_probability?.get(pos_in_country)}%"
 
         val weatherCode = WeatherCode.from(weather.hourly?.weathercode?.get(pos_in_country) ?: 0)
-        if (weather.hourly?.is_day?.get(position) == 1) {
+        if (weather.hourly?.is_day?.get(local_pos) == 1) {
             holder.weatherIcon.setImageResource(weatherCodeToImg[weatherCode]!!.day)
         } else
             holder.weatherIcon.setImageResource(

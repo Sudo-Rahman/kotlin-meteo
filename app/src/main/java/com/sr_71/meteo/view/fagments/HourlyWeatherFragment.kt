@@ -6,17 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.sr_71.meteo.API.WeatherAPI
 import com.sr_71.meteo.R
 import com.sr_71.meteo.model.Weather
 import com.sr_71.meteo.view.adapters.HourlyWeatherAdapter
-import com.sr_71.meteo.view_model.LocationViewModel
 import com.sr_71.meteo.view_model.WeatherViewModel
 
 
-class HourlyWeatherFragment(
-    private val _location: LocationViewModel? = null,
-    private val _weather: Weather? = null
-) : Fragment() {
+class HourlyWeatherFragment(private val _weather: Weather? = null) : Fragment() {
     private lateinit var _recyclerView: RecyclerView
     private var _weatherViewModel = WeatherViewModel()
 
@@ -37,25 +34,16 @@ class HourlyWeatherFragment(
             _recyclerView.adapter?.notifyDataSetChanged()
         } else {
             updateWeather()
-            observeLocation()
             _weatherViewModel.weather(
-                longitude = _location?.location?.value?.longitude ?: 0.0,
-                latitude = _location?.location?.value?.latitude ?: 0.0
-            )
-        }
-    }
-
-    private fun observeLocation() {
-        _location?.location?.observe(viewLifecycleOwner) {
-            _weatherViewModel.weather(
-                longitude = _location.location.value!!.longitude,
-                latitude = _location.location.value!!.latitude
+                longitude = NavHostFragment.locationGps.value?.longitude ?: 0.0,
+                latitude = NavHostFragment.locationGps.value?.latitude ?: 0.0
             )
         }
     }
 
     private fun updateWeather() {
         _weatherViewModel.weather.observe(viewLifecycleOwner) {
+            NavHostFragment.elevetion.value = it?.elevation
             if (_recyclerView.adapter == null) {
                 _recyclerView.adapter = HourlyWeatherAdapter(it)
             } else {
@@ -66,12 +54,14 @@ class HourlyWeatherFragment(
         }
     }
 
-    override fun onResume() {
-        super.onResume()
+    fun refresh() {
         if (_weather != null) return
-        _weatherViewModel.weather(
-            longitude = _location?.location?.value!!.longitude,
-            latitude = _location.location.value!!.latitude
-        )
+        NavHostFragment.locationGps.value?.let {
+            _weatherViewModel.weather(
+                longitude = it.longitude,
+                latitude = it.latitude,
+                weather = WeatherAPI.DAYS.TEN
+            )
+        }
     }
 }

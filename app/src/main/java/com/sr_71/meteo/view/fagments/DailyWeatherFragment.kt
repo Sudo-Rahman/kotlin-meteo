@@ -11,11 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sr_71.meteo.API.WeatherAPI
 import com.sr_71.meteo.R
 import com.sr_71.meteo.view.adapters.DailyWeatherAdapter
-import com.sr_71.meteo.view_model.LocationViewModel
 import com.sr_71.meteo.view_model.WeatherViewModel
 
 
-class DailyWeatherFragment(private val _location: LocationViewModel) : Fragment() {
+class DailyWeatherFragment() : Fragment() {
     private var _weatherViewModel = WeatherViewModel()
     private lateinit var _recyclerView: RecyclerView
 
@@ -32,7 +31,7 @@ class DailyWeatherFragment(private val _location: LocationViewModel) : Fragment(
 
         _recyclerView = view.findViewById(R.id.dailyRecycler)
         val dividerItemDecoration = DividerItemDecoration(
-            _recyclerView.getContext(),
+            _recyclerView.context,
             DividerItemDecoration.VERTICAL
         )
         dividerItemDecoration.setDrawable(
@@ -45,18 +44,6 @@ class DailyWeatherFragment(private val _location: LocationViewModel) : Fragment(
         )
         _recyclerView.addItemDecoration(dividerItemDecoration)
         updateWeather()
-        obserLocation()
-    }
-
-
-    private fun obserLocation() {
-        _location.location.observe(viewLifecycleOwner) {
-            _weatherViewModel.weather(
-                longitude = _location.location.value!!.longitude,
-                latitude = _location.location.value!!.latitude,
-                weather = WeatherAPI.DAYS.TEN
-            )
-        }
     }
 
     private fun updateWeather() {
@@ -66,19 +53,19 @@ class DailyWeatherFragment(private val _location: LocationViewModel) : Fragment(
             } else {
                 val adapter = _recyclerView.adapter as DailyWeatherAdapter
                 adapter.weather = it
-                println("adapter.weather ${it.daily}")
                 adapter.notifyDataSetChanged()
             }
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        _weatherViewModel.weather(
-            longitude = _location.location.value!!.longitude,
-            latitude = _location.location.value!!.latitude,
-            weather = WeatherAPI.DAYS.TEN
-        )
+    fun refresh() {
+        NavHostFragment.locationGps.value?.let {
+            _weatherViewModel.weather(
+                longitude = it.longitude,
+                latitude = it.latitude,
+                weather = WeatherAPI.DAYS.TEN
+            )
+        }
     }
 
 }

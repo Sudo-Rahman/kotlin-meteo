@@ -38,7 +38,7 @@ interface WeatherAPI {
         @retrofit2.http.Query("timezone") timezone: String = "auto",
         @retrofit2.http.Query("forecast_days") forecast_days: String = "10",
         @retrofit2.http.Query("models") models: String = "best_match",
-        @retrofit2.http.Query("hourly") hourly: String = "temperature_2m,weathercode,precipitation_probability",
+        @retrofit2.http.Query("hourly") hourly: String = "temperature_2m,weathercode,precipitation_probability,is_day",
 
         ): String
 }

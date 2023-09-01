@@ -16,9 +16,34 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
             app:layout_constraintBottom_toTopOf="@id/hourlyWeatherFragment"
             android:layout_marginBottom="8dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:src="@drawable/gps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:id="@+id/gpsButton"
+            app:layout_constraintStart_toEndOf="@id/txt"
+            app:layout_constraintTop_toTopOf="@id/txt"
+            android:layout_marginStart="16dp"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toBottomOf="@id/txt"
+            app:useCompatPadding="true"
+            app:fabCustomSize="32dp"
+            android:contentDescription="@android:string/VideoView_error_button"
+            app:backgroundTint="#2196F3" />
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/elevationTxt"
+            app:layout_constraintTop_toBottomOf="@id/txt"
+            app:layout_constraintStart_toStartOf="@id/txt"
+            app:layout_constraintEnd_toEndOf="@id/txt"
+            android:textSize="12sp" />
 
     <androidx.fragment.app.FragmentContainerView
             android:layout_width="match_parent"

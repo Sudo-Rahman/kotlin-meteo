@@ -8,10 +8,13 @@
             android:id="@+id/navHostFragment"
             android:name="com.sr_71.meteo.view.fagments.NavHostFragment"
             android:label="fragment_nav_host"
-            tools:layout="@layout/fragment_nav_host" >
+            tools:layout="@layout/fragment_nav_host">
         <action
                 android:id="@+id/action_navHostFragment_to_dailyDetailWeatherFragment"
                 app:destination="@id/dailyDetailWeatherFragment" />
+        <action
+                android:id="@+id/action_navHostFragment_to_searchCityFragment"
+                app:destination="@id/searchCityFragment" />
     </fragment>
     <fragment
             android:id="@+id/dailyDetailWeatherFragment"
@@ -29,4 +32,9 @@
                 android:name="dayString"
                 app:argType="string" />
     </fragment>
+    <fragment
+            android:id="@+id/searchCityFragment"
+            android:name="com.sr_71.meteo.view.fagments.SearchCityFragment"
+            android:label="fragment_search_city"
+            tools:layout="@layout/fragment_search_city" />
 </navigation>

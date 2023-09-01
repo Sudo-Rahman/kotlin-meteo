@@ -15,19 +15,22 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
+import androidx.navigation.fragment.findNavController
 import com.sr_71.meteo.R
 import com.sr_71.meteo.databinding.FragmentNavHostBinding
-import com.sr_71.meteo.view_model.LocationViewModel
 import java.util.Locale
+
 
 class NavHostFragment : Fragment() {
     private var locationManager: LocationManager? = null
-    private var _location = LocationViewModel()
 
     private lateinit var _hourlyWeatherFragment: HourlyWeatherFragment
     private lateinit var _dailyWeatherFragment: DailyWeatherFragment
 
     private lateinit var _binding: FragmentNavHostBinding
+
+    private var isLaunched = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,9 +44,15 @@ class NavHostFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        _binding.gpsButton.setOnClickListener { getLocation() }
 
+        _binding.txt.setOnClickListener {
+            val action =
+                NavHostFragmentDirections.actionNavHostFragmentToSearchCityFragment()
+            findNavController().navigate(action)
+        }
 
-        _hourlyWeatherFragment = HourlyWeatherFragment(_location = _location)
+        _hourlyWeatherFragment = HourlyWeatherFragment()
         childFragmentManager.beginTransaction()
             .replace(
                 R.id.hourlyWeatherFragment,
@@ -52,7 +61,7 @@ class NavHostFragment : Fragment() {
             )
             .commit()
 
-        _dailyWeatherFragment = DailyWeatherFragment(_location)
+        _dailyWeatherFragment = DailyWeatherFragment()
         childFragmentManager.beginTransaction()
             .replace(
                 R.id.dailyWeatherFragment,
@@ -61,44 +70,58 @@ class NavHostFragment : Fragment() {
             )
             .commit()
 
+        locationGps.observe(viewLifecycleOwner) {
+            _binding.txt.text = getCityName(long = it.longitude, lat = it.latitude)
+            _hourlyWeatherFragment.refresh()
+            _dailyWeatherFragment.refresh()
+        }
+
 
         val sharedPref = activity?.getSharedPreferences("weather", AppCompatActivity.MODE_PRIVATE)
         sharedPref?.run {
             val city = getString("city", "Paris")
             val longitude = getString("longitude", "0.0")!!.toDouble()
             val latitude = getString("latitude", "0.0")!!.toDouble()
-            _location.setLocation(Location("").apply {
-                this.longitude = longitude
-                this.latitude = latitude
-            })
+            val loc = LocationGps
+            loc.longitude = longitude
+            loc.latitude = latitude
+            locationGps.value = loc
             _binding.txt.text = city
         }
-        getLocation()
+
+        elevetion.observe(viewLifecycleOwner) {
+            _binding.elevationTxt.text = "${it}m"
+        }
+
+        locationCity.observe(viewLifecycleOwner) {
+            val loc = LocationGps
+            loc.longitude = it.first
+            loc.latitude = it.second
+            locationGps.value = loc
+        }
+
+        if (!isLaunched) {
+            isLaunched = true;getLocation()
+        }
     }
 
     private fun getLocation() {
         locationManager = getSystemService(requireContext(), LocationManager::class.java)
 
-
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            ActivityCompat.requestPermissions(
+             ActivityCompat.requestPermissions(
                 requireActivity(),
                 arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
+                    Manifest.permission.ACCESS_FINE_LOCATION
                 ),
                 1
             )
             return
-        } else {
-
+        }else {
             locationManager?.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER,
                 0L,
@@ -110,7 +133,11 @@ class NavHostFragment : Fragment() {
 
     private val _locationListener: LocationListener = object : LocationListener {
         override fun onLocationChanged(location: Location) {
-            _location.setLocation(location)
+            println("location changed: $location")
+            val loc = LocationGps
+            loc.longitude = location.longitude
+            loc.latitude = location.latitude
+            locationGps.value = loc
             val city = getCityName(location.latitude, location.longitude)
             _binding.txt.text = city
 
@@ -119,6 +146,8 @@ class NavHostFragment : Fragment() {
                 putString("longitude", location.longitude.toString())
                 putString("latitude", location.latitude.toString())
             }
+            locationManager?.removeUpdates(this)
+            locationManager = null
         }
 
         override fun onProviderEnabled(provider: String) {}
@@ -126,9 +155,25 @@ class NavHostFragment : Fragment() {
     }
 
     private fun getCityName(lat: Double, long: Double): String {
+        var name = "Unknown"
         val geoCoder = context?.let { Geocoder(it, Locale.getDefault()) }
         val address = geoCoder?.getFromLocation(lat, long, 1)
-        return address?.get(0)?.locality ?: address?.get(0)?.adminArea ?: "Unknown"
+        if (address != null && address.size > 0) {
+            name =
+                address[0].locality ?: address[0].subAdminArea ?: address[0].adminArea
+        }
+        return name
     }
 
+    companion object {
+
+        object LocationGps {
+            var longitude = 0.0
+            var latitude = 0.0
+        }
+
+        var locationGps: MutableLiveData<LocationGps> = MutableLiveData(LocationGps)
+        var locationCity: MutableLiveData<Pair<Double, Double>> = MutableLiveData()
+        var elevetion = MutableLiveData<Int>()
+    }
 }

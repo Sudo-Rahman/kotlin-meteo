@@ -13,6 +13,7 @@
             android:id="@+id/txt"
             android:textSize="20sp"
             android:textStyle="bold"
+            android:textColor="@color/design_default_color_background"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

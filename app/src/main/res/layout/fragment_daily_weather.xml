@@ -6,7 +6,7 @@
         android:layout_height="wrap_content"
         tools:context=".view.fagments.DailyWeatherFragment"
         android:background="@drawable/rounded_corner"
-        android:backgroundTint="#FF2196F3"
+        android:backgroundTint="#1AFFFFFF"
         android:layout_margin="8dp"
         android:padding="4dp">
 

@@ -23,7 +23,6 @@ class SearchCityAdapter(var city: Citys) : RecyclerView.Adapter<SearchCityViewHo
 
     override fun onBindViewHolder(holder: SearchCityViewHolder, position: Int) {
         val city = city.features?.get(position)
-        println(city)
         holder.name.text = city?.properties?.city ?: city?.properties?.formatted
         holder.country.text = city?.properties?.country
 

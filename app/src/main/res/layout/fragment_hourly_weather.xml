@@ -7,7 +7,7 @@
         tools:context=".view.fagments.HourlyWeatherFragment"
         android:background="@drawable/rounded_corner"
         android:clipToPadding="true"
-        android:backgroundTint="#2196F3"
+        android:backgroundTint="#1AFFFFFF"
         android:layout_margin="8dp"
         android:padding="4dp">
 

@@ -39,6 +39,9 @@ class HourlyWeatherFragment(private val _weather: Weather? = null) : Fragment() 
                 latitude = NavHostFragment.locationGps.value?.latitude ?: 0.0
             )
         }
+        NavHostFragment.locationGps.observe(viewLifecycleOwner) {
+            refresh()
+        }
     }
 
     private fun updateWeather() {
@@ -54,7 +57,7 @@ class HourlyWeatherFragment(private val _weather: Weather? = null) : Fragment() 
         }
     }
 
-    fun refresh() {
+    private fun refresh() {
         if (_weather != null) return
         NavHostFragment.locationGps.value?.let {
             _weatherViewModel.weather(

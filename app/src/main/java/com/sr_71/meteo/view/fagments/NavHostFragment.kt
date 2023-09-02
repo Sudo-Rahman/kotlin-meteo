@@ -2,6 +2,8 @@ package com.sr_71.meteo.view.fagments
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.location.Geocoder
 import android.location.Location
 import android.location.LocationListener
@@ -17,8 +19,10 @@ import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.sr_71.meteo.R
 import com.sr_71.meteo.databinding.FragmentNavHostBinding
+import com.sr_71.meteo.view.activities.MainActivity
 import java.util.Locale
 
 
@@ -72,8 +76,6 @@ class NavHostFragment : Fragment() {
 
         locationGps.observe(viewLifecycleOwner) {
             _binding.txt.text = getCityName(long = it.longitude, lat = it.latitude)
-            _hourlyWeatherFragment.refresh()
-            _dailyWeatherFragment.refresh()
         }
 
 
@@ -97,11 +99,17 @@ class NavHostFragment : Fragment() {
             val loc = LocationGps
             loc.longitude = it.first
             loc.latitude = it.second
+            saveDate(getCityName(loc.latitude, loc.longitude), loc.longitude, loc.latitude)
             locationGps.value = loc
         }
 
         if (!isLaunched) {
             isLaunched = true;getLocation()
+        }
+
+        MainActivity.isDay.observe(viewLifecycleOwner) {
+            // color day : #2196F3 night : #FF445667
+            _binding.gpsButton.backgroundTintList = ColorStateList.valueOf(if (it) Color.parseColor("#2196F3") else Color.parseColor("#FF445667"))
         }
     }
 
@@ -133,7 +141,6 @@ class NavHostFragment : Fragment() {
 
     private val _locationListener: LocationListener = object : LocationListener {
         override fun onLocationChanged(location: Location) {
-            println("location changed: $location")
             val loc = LocationGps
             loc.longitude = location.longitude
             loc.latitude = location.latitude
@@ -141,17 +148,21 @@ class NavHostFragment : Fragment() {
             val city = getCityName(location.latitude, location.longitude)
             _binding.txt.text = city
 
-            requireContext().getSharedPreferences("weather", AppCompatActivity.MODE_PRIVATE)?.edit {
-                putString("city", city)
-                putString("longitude", location.longitude.toString())
-                putString("latitude", location.latitude.toString())
-            }
+            saveDate(city, location.longitude, location.latitude)
             locationManager?.removeUpdates(this)
             locationManager = null
         }
 
         override fun onProviderEnabled(provider: String) {}
         override fun onProviderDisabled(provider: String) {}
+    }
+
+    private fun saveDate(city : String, longitude : Double, latitude : Double) {
+        requireContext().getSharedPreferences("weather", AppCompatActivity.MODE_PRIVATE)?.edit {
+            putString("city", city)
+            putString("longitude", longitude.toString())
+            putString("latitude", latitude.toString())
+        }
     }
 
     private fun getCityName(lat: Double, long: Double): String {

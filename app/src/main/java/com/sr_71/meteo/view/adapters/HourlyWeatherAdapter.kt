@@ -10,6 +10,7 @@ import com.sr_71.meteo.R
 import com.sr_71.meteo.model.Weather
 import com.sr_71.meteo.model.WeatherCode
 import com.sr_71.meteo.model.weatherCodeToImg
+import com.sr_71.meteo.view.activities.MainActivity
 import java.time.LocalDateTime
 import java.time.ZoneId
 import kotlin.math.roundToInt
@@ -38,10 +39,15 @@ class HourlyWeatherAdapter(var weather: Weather, private val _currentHour: Boole
 
             //get date time on utc + offset
             val date_in_country = utc_date_time.plusHours(offset.toLong())
+
+            if (position == 0)
+                MainActivity.isDay.value = weather.hourly?.is_day?.get((date_in_country.hour + position) % 24) == 1
+
             (date_in_country.hour + position) % 24
         } else {
             position % 24
         }
+
 
         holder.time.text = "${pos}h"
         holder.temperature.text = "${weather.hourly?.temperature_2m?.get(pos)?.roundToInt()}°"

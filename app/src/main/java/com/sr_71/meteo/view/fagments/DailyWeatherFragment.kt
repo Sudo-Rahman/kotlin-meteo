@@ -44,6 +44,9 @@ class DailyWeatherFragment() : Fragment() {
         )
         _recyclerView.addItemDecoration(dividerItemDecoration)
         updateWeather()
+        NavHostFragment.locationGps.observe(viewLifecycleOwner) {
+            refresh()
+        }
     }
 
     private fun updateWeather() {
@@ -58,7 +61,7 @@ class DailyWeatherFragment() : Fragment() {
         }
     }
 
-    fun refresh() {
+    private  fun refresh() {
         NavHostFragment.locationGps.value?.let {
             _weatherViewModel.weather(
                 longitude = it.longitude,

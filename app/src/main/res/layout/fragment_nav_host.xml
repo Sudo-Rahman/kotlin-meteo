@@ -44,6 +44,7 @@
             app:layout_constraintTop_toBottomOf="@id/txt"
             app:layout_constraintStart_toStartOf="@id/txt"
             app:layout_constraintEnd_toEndOf="@id/txt"
+            android:textColor="@color/white"
             android:textSize="12sp" />
 
     <androidx.fragment.app.FragmentContainerView

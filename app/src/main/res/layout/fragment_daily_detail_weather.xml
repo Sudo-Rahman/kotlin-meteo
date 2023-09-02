@@ -17,7 +17,7 @@
             android:id="@+id/dayString"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:textColor="#FF42A5F5" />
+            android:textColor="#FFFFFF" />
 
     <androidx.fragment.app.FragmentContainerView
             android:layout_width="0dp"
@@ -36,11 +36,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:cardCornerRadius="16dp"
             android:layout_marginStart="8dp"
-            app:cardElevation="3dp"
-            app:cardBackgroundColor="#FF64B5F6"
+            app:cardElevation="0dp"
             android:id="@+id/soleil"
             app:layout_constraintEnd_toStartOf="@+id/soleil1"
-            android:layout_marginEnd="8dp">
+            android:layout_marginEnd="8dp"
+            android:outlineAmbientShadowColor="#1AFFFFFF"
+            app:cardBackgroundColor="#1AFFFFFF">
 
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -95,8 +96,8 @@
             app:layout_constraintTop_toBottomOf="@id/hourlyDetailFragment"
             android:layout_marginTop="16dp"
             app:cardCornerRadius="16dp"
-            app:cardElevation="3dp"
-            app:cardBackgroundColor="#FF64B5F6"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="#1AFFFFFF"
             android:id="@+id/soleil1"
             android:layout_marginStart="8dp"
             app:layout_constraintStart_toEndOf="@id/soleil"
@@ -159,8 +160,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:cardCornerRadius="16dp"
             android:layout_marginStart="8dp"
-            app:cardElevation="3dp"
-            app:cardBackgroundColor="#FF64B5F6"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="#1AFFFFFF"
             android:id="@+id/UV"
             app:layout_constraintEnd_toStartOf="@+id/soleil1"
             android:layout_marginEnd="8dp">
@@ -218,8 +219,8 @@
             app:layout_constraintTop_toBottomOf="@id/soleil1"
             android:layout_marginTop="16dp"
             app:cardCornerRadius="16dp"
-            app:cardElevation="3dp"
-            app:cardBackgroundColor="#FF64B5F6"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="#1AFFFFFF"
             android:id="@+id/vent"
             android:layout_marginStart="8dp"
             app:layout_constraintStart_toEndOf="@id/soleil"
@@ -282,8 +283,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:cardCornerRadius="16dp"
             android:layout_marginStart="8dp"
-            app:cardElevation="3dp"
-            app:cardBackgroundColor="#FF64B5F6"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="#1AFFFFFF"
             android:id="@+id/ventDirection"
             app:layout_constraintEnd_toStartOf="@+id/soleil1"
             android:layout_marginEnd="8dp">
@@ -342,8 +343,8 @@
             app:layout_constraintTop_toBottomOf="@id/vent"
             android:layout_marginTop="16dp"
             app:cardCornerRadius="16dp"
-            app:cardElevation="3dp"
-            app:cardBackgroundColor="#FF64B5F6"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="#1AFFFFFF"
             android:id="@+id/maxPrecipitation"
             android:layout_marginStart="8dp"
             app:layout_constraintStart_toEndOf="@id/soleil"

@@ -37,6 +37,12 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         val isDay = MutableLiveData(true)
+        val isRefresh = MutableLiveData(false)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        isRefresh.value = true
     }
 }
 

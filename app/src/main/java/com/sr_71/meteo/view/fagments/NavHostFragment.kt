@@ -34,8 +34,6 @@ class NavHostFragment : Fragment() {
 
     private lateinit var _binding: FragmentNavHostBinding
 
-    private var isLaunched = false
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -95,16 +93,19 @@ class NavHostFragment : Fragment() {
             _binding.elevationTxt.text = "${it}m"
         }
 
+        MainActivity.isRefresh.observe(viewLifecycleOwner) {
+            if (it) {
+                getLocation()
+                MainActivity.isRefresh.value = false
+            }
+        }
+
         locationCity.observe(viewLifecycleOwner) {
             val loc = LocationGps
             loc.longitude = it.first
             loc.latitude = it.second
             saveDate(getCityName(loc.latitude, loc.longitude), loc.longitude, loc.latitude)
             locationGps.value = loc
-        }
-
-        if (!isLaunched) {
-            isLaunched = true;getLocation()
         }
 
         MainActivity.isDay.observe(viewLifecycleOwner) {

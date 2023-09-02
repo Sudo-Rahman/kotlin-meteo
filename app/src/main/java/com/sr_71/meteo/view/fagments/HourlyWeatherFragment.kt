@@ -44,7 +44,7 @@ class HourlyWeatherFragment(private val _weather: Weather? = null) : Fragment() 
         }
     }
 
-    private fun updateWeather() {
+     private fun updateWeather() {
         _weatherViewModel.weather.observe(viewLifecycleOwner) {
             NavHostFragment.elevetion.value = it?.elevation
             if (_recyclerView.adapter == null) {
@@ -57,7 +57,7 @@ class HourlyWeatherFragment(private val _weather: Weather? = null) : Fragment() 
         }
     }
 
-    private fun refresh() {
+     private fun refresh() {
         if (_weather != null) return
         NavHostFragment.locationGps.value?.let {
             _weatherViewModel.weather(

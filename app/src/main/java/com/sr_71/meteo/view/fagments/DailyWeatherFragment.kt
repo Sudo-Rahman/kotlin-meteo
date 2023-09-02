@@ -61,7 +61,7 @@ class DailyWeatherFragment() : Fragment() {
         }
     }
 
-    private  fun refresh() {
+      private fun refresh() {
         NavHostFragment.locationGps.value?.let {
             _weatherViewModel.weather(
                 longitude = it.longitude,

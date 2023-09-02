@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.RecyclerView
 import com.sr_71.meteo.R
 import com.sr_71.meteo.model.Weather
@@ -14,7 +13,7 @@ import com.sr_71.meteo.model.WeatherCode
 import com.sr_71.meteo.model.weatherCodeToImg
 import com.sr_71.meteo.view.fagments.NavHostFragmentDirections
 import java.text.SimpleDateFormat
-import java.util.Date
+import java.time.LocalDate
 import kotlin.math.roundToInt
 
 
@@ -35,11 +34,19 @@ class DailyWeatherAdapter(var weather: Weather) : RecyclerView.Adapter<DailyWeat
         } else {
             if (position == 1) holder.day.text = "Demain"
             else {
-                // get day string in system language
-                val sdf = SimpleDateFormat("EEEE")
-                val d = Date().time + (position * 24 * 60 * 60 * 1000)
-                val dayOfTheWeek: String = sdf.format(d).replaceFirstChar { it.uppercase() }
-                holder.day.text = dayOfTheWeek
+                weather.daily?.time?.get(position)?.let { it ->
+                    // format : "2023-09-03"
+                    try {
+                        val sdf = SimpleDateFormat("yyyy-MM-dd")
+                        val date = sdf.parse(it)
+                        // get day string in system language and firt letter in uppercase
+                        holder.day.text = android.text.format.DateFormat.format("EEEE", date).toString().replaceFirstChar { first ->
+                            first.uppercase()
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
             }
         }
         val weatherCode = WeatherCode.from(weather.daily?.weathercode?.get(position) ?: 0)

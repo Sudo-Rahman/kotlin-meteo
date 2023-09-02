@@ -11,7 +11,6 @@ import com.sr_71.meteo.model.Weather
 import com.sr_71.meteo.model.WeatherCode
 import com.sr_71.meteo.model.weatherCodeToImg
 import java.time.LocalDateTime
-import java.time.LocalTime
 import java.time.ZoneId
 import kotlin.math.roundToInt
 
@@ -29,59 +28,32 @@ class HourlyWeatherAdapter(var weather: Weather, private val _currentHour: Boole
     }
 
     override fun onBindViewHolder(holder: HourlyWeatherViewHolder, position: Int) {
+        val pos: Int
+        pos = if (_currentHour) {
+            // get UTC dateTime
+            val utc_date_time = LocalDateTime.now(ZoneId.of("UTC"))
 
-        if (_currentHour) {
-            startCurrentHour(holder, position)
+            //get offset of the country
+            val offset = weather.utc_offset_seconds / 3600
+
+            //get date time on utc + offset
+            val date_in_country = utc_date_time.plusHours(offset.toLong())
+            (date_in_country.hour + position) % 24
         } else {
-            StartToZero(holder, position)
+            position % 24
         }
-    }
 
-    private fun StartToZero(holder: HourlyWeatherViewHolder, position: Int) {
-        holder.time.text = "${position}h"
-        holder.temperature.text = "${weather.hourly?.temperature_2m?.get(position)?.roundToInt()}°"
+        holder.time.text = "${pos}h"
+        holder.temperature.text = "${weather.hourly?.temperature_2m?.get(pos)?.roundToInt()}°"
 
-        if ((weather.hourly?.precipitation_probability?.get(position) ?: 0) > 5)
+        if ((weather.hourly?.precipitation_probability?.get(pos) ?: 0) > 5)
             holder.precipitation.text =
                 "${weather.hourly?.precipitation_probability?.get(position)}%"
 
-        val weatherCode = WeatherCode.from(weather.hourly?.weathercode?.get(position) ?: 0)
-        if (weather.hourly?.is_day?.get(position) == 1) {
+        val weatherCode = WeatherCode.from(weather.hourly?.weathercode?.get(pos) ?: 0)
+        if (weather.hourly?.is_day?.get(pos) == 1)
             holder.weatherIcon.setImageResource(weatherCodeToImg[weatherCode]!!.day)
-        } else
-            holder.weatherIcon.setImageResource(
-                weatherCodeToImg[weatherCode]?.night ?: weatherCodeToImg[weatherCode]!!.day
-            )
-    }
-
-    private fun startCurrentHour(holder: HourlyWeatherViewHolder, position: Int) {
-        // get UTC + 0 hour
-        val utc_hour = LocalDateTime.now(ZoneId.of("UTC")).hour
-
-        //get offset of the country
-        val offset = weather.utc_offset_seconds / 3600
-
-        //get time on local machine
-        val local_hour = LocalTime.now().hour
-        val local_pos = position + local_hour
-
-        //get current hour in country
-        val current_hour_in_country = utc_hour + offset
-        val pos_in_country = position + current_hour_in_country
-
-
-        holder.time.text = "${local_pos % 24}h"
-        holder.temperature.text =
-            "${weather.hourly?.temperature_2m?.get(pos_in_country)?.roundToInt()}°"
-
-        if ((weather.hourly?.precipitation_probability?.get(pos_in_country) ?: 0) > 5)
-            holder.precipitation.text =
-                "${weather.hourly?.precipitation_probability?.get(pos_in_country)}%"
-
-        val weatherCode = WeatherCode.from(weather.hourly?.weathercode?.get(pos_in_country) ?: 0)
-        if (weather.hourly?.is_day?.get(local_pos) == 1) {
-            holder.weatherIcon.setImageResource(weatherCodeToImg[weatherCode]!!.day)
-        } else
+        else
             holder.weatherIcon.setImageResource(
                 weatherCodeToImg[weatherCode]?.night ?: weatherCodeToImg[weatherCode]!!.day
             )
@@ -95,6 +67,5 @@ class HourlyWeatherViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     var temperature: TextView = view.findViewById(R.id.temperature)
     var weatherIcon: ImageView = view.findViewById(R.id.weatherIcon)
     var precipitation: TextView = view.findViewById(R.id.precipitation)
-
 }
 

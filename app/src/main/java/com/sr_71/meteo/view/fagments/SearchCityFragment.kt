@@ -8,16 +8,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.R
 import com.sr_71.meteo.databinding.FragmentSearchCityBinding
 import com.sr_71.meteo.model.Citys
+import com.sr_71.meteo.view.adapters.AdapterCityOnClick
 import com.sr_71.meteo.view.adapters.SearchCityAdapter
 import com.sr_71.meteo.view_model.CitySearchViewModel
+import com.sr_71.meteo.view_model.HomeViewModel
 
-class SearchCityFragment() : Fragment() {
+class SearchCityFragment() : Fragment(), AdapterCityOnClick {
     private var _citySearchViewModel = CitySearchViewModel()
+    val _viewModel: HomeViewModel by activityViewModels()
 
     private lateinit var recyclerView: RecyclerView
 
@@ -69,12 +74,18 @@ class SearchCityFragment() : Fragment() {
     private fun listener() {
         _citySearchViewModel.city.observe(viewLifecycleOwner) {
             if (recyclerView.adapter == null) {
-                recyclerView.adapter = SearchCityAdapter(_citySearchViewModel.city.value ?: Citys())
+                recyclerView.adapter = SearchCityAdapter(_citySearchViewModel.city.value ?: Citys(),this)
             } else {
                 val adapter = recyclerView.adapter as SearchCityAdapter
                 adapter.city = _citySearchViewModel.city.value ?: Citys()
                 adapter.notifyDataSetChanged()
             }
         }
+    }
+
+    override fun onClick(loc: Pair<Double, Double>) {
+        _viewModel.setLocation(loc)
+        println("loc : $loc")
+        findNavController().popBackStack()
     }
 }

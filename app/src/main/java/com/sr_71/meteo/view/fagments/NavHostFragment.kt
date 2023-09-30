@@ -12,17 +12,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.sr_71.meteo.R
 import com.sr_71.meteo.databinding.FragmentNavHostBinding
-import com.sr_71.meteo.view.activities.MainActivity
+import com.sr_71.meteo.view_model.HomeViewModel
 import java.util.Locale
 
 
@@ -33,6 +33,7 @@ class NavHostFragment : Fragment() {
     private lateinit var _dailyWeatherFragment: DailyWeatherFragment
 
     private lateinit var _binding: FragmentNavHostBinding
+    val _viewModel: HomeViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -72,8 +73,8 @@ class NavHostFragment : Fragment() {
             )
             .commit()
 
-        locationGps.observe(viewLifecycleOwner) {
-            _binding.txt.text = getCityName(long = it.longitude, lat = it.latitude)
+        _viewModel.locationGps.observe(viewLifecycleOwner) {
+            _binding.txt.text = getCityName(lat = it.first, long = it.second)
         }
 
 
@@ -82,35 +83,33 @@ class NavHostFragment : Fragment() {
             val city = getString("city", "Paris")
             val longitude = getString("longitude", "0.0")!!.toDouble()
             val latitude = getString("latitude", "0.0")!!.toDouble()
-            val loc = LocationGps
-            loc.longitude = longitude
-            loc.latitude = latitude
-            locationGps.value = loc
-            _binding.txt.text = city
-        }
-
-        elevetion.observe(viewLifecycleOwner) {
-            _binding.elevationTxt.text = "${it}m"
-        }
-
-        MainActivity.isRefresh.observe(viewLifecycleOwner) {
-            if (it) {
-                getLocation()
-                MainActivity.isRefresh.value = false
+            if(_viewModel.locationGps.value == null) {
+                _viewModel.setLocation(Pair(latitude, longitude))
+                _binding.txt.text = city
             }
         }
 
-        locationCity.observe(viewLifecycleOwner) {
-            val loc = LocationGps
-            loc.longitude = it.first
-            loc.latitude = it.second
-            saveDate(getCityName(loc.latitude, loc.longitude), loc.longitude, loc.latitude)
-            locationGps.value = loc
+        _viewModel.elevetion.observe(viewLifecycleOwner) {
+            _binding.elevationTxt.text = "${it}m"
         }
 
-        MainActivity.isDay.observe(viewLifecycleOwner) {
+        _viewModel.locationGps.observe(viewLifecycleOwner) {
+            println("locationGps: $it")
+            saveDate(getCityName(lat = it.first, long = it.second), latitude = it.first, longitude = it.second)
+        }
+
+        _viewModel.isDay.observe(viewLifecycleOwner) {
             // color day : #2196F3 night : #FF445667
-            _binding.gpsButton.backgroundTintList = ColorStateList.valueOf(if (it) Color.parseColor("#2196F3") else Color.parseColor("#FF445667"))
+            _binding.gpsButton.backgroundTintList =
+                ColorStateList.valueOf(if (it) Color.parseColor("#2196F3") else Color.parseColor("#FF445667"))
+        }
+
+        _viewModel.isDay.observe(viewLifecycleOwner) {
+//            println("isDay: $it")
+            requireActivity().findViewById<FrameLayout>(R.id.background).background =
+                if (it) activity?.getDrawable(R.drawable.gradient_main_page_day) else activity?.getDrawable(R.drawable.gradient_main_page_night)
+            // change android status bar color
+            activity?.window?.statusBarColor = if (it) Color.parseColor("#2196F3") else Color.parseColor("#FF445667")
         }
     }
 
@@ -142,10 +141,7 @@ class NavHostFragment : Fragment() {
 
     private val _locationListener: LocationListener = object : LocationListener {
         override fun onLocationChanged(location: Location) {
-            val loc = LocationGps
-            loc.longitude = location.longitude
-            loc.latitude = location.latitude
-            locationGps.value = loc
+            _viewModel.setLocation(location.latitude, location.longitude)
             val city = getCityName(location.latitude, location.longitude)
             _binding.txt.text = city
 
@@ -175,17 +171,5 @@ class NavHostFragment : Fragment() {
                 address[0].locality ?: address[0].subAdminArea ?: address[0].adminArea
         }
         return name
-    }
-
-    companion object {
-
-        object LocationGps {
-            var longitude = 0.0
-            var latitude = 0.0
-        }
-
-        var locationGps: MutableLiveData<LocationGps> = MutableLiveData(LocationGps)
-        var locationCity: MutableLiveData<Pair<Double, Double>> = MutableLiveData()
-        var elevetion = MutableLiveData<Int>()
     }
 }

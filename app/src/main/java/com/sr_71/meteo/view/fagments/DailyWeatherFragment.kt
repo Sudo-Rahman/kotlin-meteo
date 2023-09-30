@@ -6,16 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.sr_71.meteo.API.WeatherAPI
 import com.sr_71.meteo.R
 import com.sr_71.meteo.view.adapters.DailyWeatherAdapter
-import com.sr_71.meteo.view_model.WeatherViewModel
+import com.sr_71.meteo.view_model.HomeViewModel
 
 
 class DailyWeatherFragment() : Fragment() {
-    private var _weatherViewModel = WeatherViewModel()
+    val _viewModel: HomeViewModel by activityViewModels()
     private lateinit var _recyclerView: RecyclerView
 
     override fun onCreateView(
@@ -44,13 +45,13 @@ class DailyWeatherFragment() : Fragment() {
         )
         _recyclerView.addItemDecoration(dividerItemDecoration)
         updateWeather()
-        NavHostFragment.locationGps.observe(viewLifecycleOwner) {
+        _viewModel.locationGps.observe(viewLifecycleOwner) {
             refresh()
         }
     }
 
     private fun updateWeather() {
-        _weatherViewModel.weather.observe(viewLifecycleOwner) {
+        _viewModel.weatherDaily.observe(viewLifecycleOwner) {
             if (_recyclerView.adapter == null) {
                 _recyclerView.adapter = DailyWeatherAdapter(it)
             } else {
@@ -62,10 +63,10 @@ class DailyWeatherFragment() : Fragment() {
     }
 
       private fun refresh() {
-        NavHostFragment.locationGps.value?.let {
-            _weatherViewModel.weather(
-                longitude = it.longitude,
-                latitude = it.latitude,
+        _viewModel.locationGps.value?.let {
+            _viewModel.weather(
+                latitude = it.first,
+                longitude = it.second,
                 weather = WeatherAPI.DAYS.TEN
             )
         }

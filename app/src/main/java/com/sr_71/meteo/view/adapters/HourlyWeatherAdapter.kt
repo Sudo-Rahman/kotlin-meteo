@@ -40,9 +40,6 @@ class HourlyWeatherAdapter(var weather: Weather, private val _currentHour: Boole
             //get date time on utc + offset
             val date_in_country = utc_date_time.plusHours(offset.toLong())
 
-            if (position == 0)
-                MainActivity.isDay.value = weather.hourly?.is_day?.get((date_in_country.hour + position) % 24) == 1
-
             (date_in_country.hour + position) % 24
         } else {
             position % 24

@@ -1,20 +1,19 @@
 package com.sr_71.meteo.view.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.sr_71.meteo.R
+import com.sr_71.meteo.databinding.SearchCityItemLayoutBinding
 import com.sr_71.meteo.model.Citys
-import com.sr_71.meteo.view.fagments.NavHostFragment
+import com.sr_71.meteo.model.Propertie
 
-class SearchCityAdapter(var city: Citys) : RecyclerView.Adapter<SearchCityViewHolder>() {
+class SearchCityAdapter(var city: Citys, val callback: AdapterCityOnClick) : RecyclerView.Adapter<SearchCityAdapter.SearchCityViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchCityViewHolder {
-        val vew = LayoutInflater.from(parent.context)
+        val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.search_city_item_layout, parent, false)
-        return SearchCityViewHolder(vew)
+        return SearchCityViewHolder(SearchCityItemLayoutBinding.bind(view))
     }
 
     override fun getItemCount(): Int {
@@ -23,18 +22,20 @@ class SearchCityAdapter(var city: Citys) : RecyclerView.Adapter<SearchCityViewHo
 
     override fun onBindViewHolder(holder: SearchCityViewHolder, position: Int) {
         val city = city.features?.get(position)
-        holder.name.text = city?.properties?.city ?: city?.properties?.formatted
-        holder.country.text = city?.properties?.country
+        holder.onBind(city?.properties)
+    }
 
-        holder.view.setOnClickListener {
-            NavHostFragment.locationCity.value =
-                Pair(city?.properties?.lon ?: 0.0, city?.properties?.lat ?: 0.0)
-            holder.view.findNavController().popBackStack()
+    inner class SearchCityViewHolder( binding: SearchCityItemLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
+        val name: TextView = binding.city
+        val country: TextView = binding.country
+
+        fun onBind(city: Propertie?) {
+            name.text = city?.city ?: city?.formatted
+            country.text = city?.country
+
+            itemView.setOnClickListener {
+                callback.onClick(Pair(city?.lat ?: 0.0, city?.lon ?: 0.0))
+            }
         }
     }
-}
-
-class SearchCityViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-    val name: TextView = view.findViewById(R.id.city)
-    val country: TextView = view.findViewById(R.id.country)
 }

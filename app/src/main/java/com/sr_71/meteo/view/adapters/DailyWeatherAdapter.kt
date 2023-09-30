@@ -29,6 +29,7 @@ class DailyWeatherAdapter(var weather: Weather) : RecyclerView.Adapter<DailyWeat
     }
 
     override fun onBindViewHolder(holder: DailyWeatherViewHolder, position: Int) {
+        println("position : ${weather.daily?.time?.size}")
         if (position == 0) {
             holder.day.text = "Aujourd'hui"
         } else {
